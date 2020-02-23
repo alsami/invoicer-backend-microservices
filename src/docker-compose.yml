@@ -1,0 +1,25 @@
+version: '3'
+services:
+  sqlserver:
+    image: microsoft/mssql-server-linux:latest
+    container_name: sqlserver
+    volumes:
+      - sqlserverdata:/var/opt/mssql 
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y 
+      - MSSQL_PID=Developer
+      - SA_PASSWORD=tSlY4ETLAZ
+  userservice:
+    container_name: user_service
+    build: UserService
+    depends_on:
+      - sqlserver
+    ports:
+      - "5100:5100"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+volumes:
+  sqlserverdata:
+    external: true    
