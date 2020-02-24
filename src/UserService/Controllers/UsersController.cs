@@ -15,8 +15,8 @@ namespace UserService.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private UserManagementDBContext _dbContext;
-        public UsersController(UserManagementDBContext dBContext) {
+        private UserDBContext _dbContext;
+        public UsersController(UserDBContext dBContext) {
             _dbContext = dBContext;
         }
         // GET: api/users/

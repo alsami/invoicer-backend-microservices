@@ -5,11 +5,11 @@ using UserService.Models;
 
 namespace UserService.DataAccess
 {
-    public class UserManagementDBContext : DbContext
+    public class UserDBContext : DbContext
     {
         public DbSet<User> Users { get; set; }
 
-        public UserManagementDBContext(DbContextOptions<UserManagementDBContext> options) : base(options)
+        public UserDBContext(DbContextOptions<UserDBContext> options) : base(options)
         {
         }
 

@@ -24,8 +24,7 @@ namespace UserService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-           var sqlConnectionString = _configuration.GetConnectionString("UserManagementCN");
-           services.AddDbContext<UserManagementDBContext>(options => options.UseSqlServer(sqlConnectionString));
+           services.AddDbContext<UserDBContext>(options => options.UseSqlServer(_configuration.GetConnectionString("UserManagementCN")));
            services.AddMvc(options => options.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
         }
@@ -42,7 +41,7 @@ namespace UserService
             // auto migrate db
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                scope.ServiceProvider.GetService<UserManagementDBContext>().MigrateDB();
+                scope.ServiceProvider.GetService<UserDBContext>().MigrateDB();
             }
         }
     }
