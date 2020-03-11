@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Invoicer.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,7 @@ namespace UserService
            services.AddDbContext<UserDBContext>(options => options.UseSqlServer(_configuration.GetConnectionString("UserManagementCN")));
            services.AddMvc(options => options.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
+            services.AddSingleton<ICommandBus>(new CommandBus(Assembly.GetExecutingAssembly()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,10 +42,10 @@ namespace UserService
             app.UseMvc();
 
             // auto migrate db
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetService<UserDBContext>().MigrateDB();
-            }
+            //using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    scope.ServiceProvider.GetService<UserDBContext>().MigrateDB();
+            //}
         }
     }
 }

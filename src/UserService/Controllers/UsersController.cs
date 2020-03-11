@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Invoicer.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UserService.Commands;
 using UserService.DataAccess;
+using UserService.Mappers;
 using UserService.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,8 +20,10 @@ namespace UserService.Controllers
     public class UsersController : Controller
     {
         private UserDBContext _dbContext;
-        public UsersController(UserDBContext dBContext) {
+        private readonly ICommandBus _commandBus;
+        public UsersController(UserDBContext dBContext, ICommandBus commandBus) {
             _dbContext = dBContext;
+            _commandBus = commandBus;
         }
         // GET: api/users/
         [HttpGet]
@@ -29,7 +35,7 @@ namespace UserService.Controllers
 
         // GET api/users/5
         [HttpGet("{Id}", Name = "GetUserById")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
             if (user == null)
@@ -41,20 +47,22 @@ namespace UserService.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody]RegisterUserCommand command)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    //User user = command.MapToUser();
+                    _commandBus.Send(command);
                     // insert user
-                    _dbContext.Users.Add(user);
-                    await _dbContext.SaveChangesAsync();
+                    //_dbContext.Users.Add(user);
+                    //await _dbContext.SaveChangesAsync();
 
                     // send event
 
                     // return result
-                    return CreatedAtRoute("GetUserById", new { userId = user.Id }, user);
+                    return Ok(command);
                 }
                 return BadRequest();
             }
