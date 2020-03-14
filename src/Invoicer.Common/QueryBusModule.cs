@@ -11,8 +11,10 @@ namespace Invoicer.Common
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(ExecutingAssembly)
-                 .Where(x => x.IsAssignableTo<IQueryHandler>())
-                 .AsImplementedInterfaces();
+                .Where(x => x.IsClosedTypeOf(typeof(IQueryHandler<,>)))
+                .AsImplementedInterfaces();
+
+
         }
     }
 }

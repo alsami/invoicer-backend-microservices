@@ -1,6 +1,10 @@
-﻿namespace UserService.Models
+﻿using System;
+using System.Threading.Tasks;
+using Invoicer.Common;
+
+namespace UserService.Models
 {
-    public class User
+    public class User : IAggregateRoot
     {
         public string Id { get; set; }
         public string Name { get; set; }

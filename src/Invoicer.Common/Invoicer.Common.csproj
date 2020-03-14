@@ -6,9 +6,10 @@
 
   <ItemGroup>
     <Folder Include="Handlers\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="DataAccess\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
   </ItemGroup>
 </Project>

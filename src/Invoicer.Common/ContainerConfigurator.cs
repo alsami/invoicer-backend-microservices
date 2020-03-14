@@ -28,7 +28,10 @@ namespace Invoicer.Common
             {
                 ExecutingAssembly = assembly
             });
-
+            builder.RegisterModule(new RepositoryModule()
+            {
+                ExecutingAssembly = assembly
+            });
             Container = builder.Build();
 
         }

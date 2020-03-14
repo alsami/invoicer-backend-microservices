@@ -21,7 +21,7 @@ namespace Invoicer.Common
         public void Send<TCommand>(TCommand command) where TCommand : ICommand
         {
             using (var scope = ContainerConfigurator.GetInstance(ExecutingAssembly ?? throw new Exception("Unable to resolve Executing Assembly")).Container.BeginLifetimeScope())
-            {
+            { 
                 var handlers = scope.Resolve<IEnumerable<ICommandHandler<TCommand>>>().ToList();
                 if (handlers.Count == 1)
                 {

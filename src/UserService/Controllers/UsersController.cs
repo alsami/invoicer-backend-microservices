@@ -11,6 +11,7 @@ using UserService.Commands;
 using UserService.DataAccess;
 using UserService.Mappers;
 using UserService.Models;
+using UserService.Queries;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,9 +22,11 @@ namespace UserService.Controllers
     {
         private UserDBContext _dbContext;
         private readonly ICommandBus _commandBus;
-        public UsersController(UserDBContext dBContext, ICommandBus commandBus) {
+        private readonly IQueryBus _queryBus;
+        public UsersController(UserDBContext dBContext, ICommandBus commandBus, IQueryBus queryBus) {
             _dbContext = dBContext;
             _commandBus = commandBus;
+            _queryBus = queryBus;
         }
         // GET: api/users/
         [HttpGet]
@@ -35,13 +38,9 @@ namespace UserService.Controllers
 
         // GET api/users/5
         [HttpGet("{Id}", Name = "GetUserById")]
-        public async Task<IActionResult> GetUserById(string id)
+        public async Task<IActionResult> GetUserById([FromBody]GetUserByIDQuery query)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = await _queryBus.Query<GetUserByIDQuery, User>(query);
             return Ok(user);
         }
 
