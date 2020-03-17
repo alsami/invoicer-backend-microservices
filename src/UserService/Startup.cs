@@ -28,8 +28,8 @@ namespace UserService
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-           services.AddDbContext<UserDBContext>(options => options.UseSqlServer(_configuration.GetConnectionString("UserManagementCN")));
-           services.AddMvc(options => options.EnableEndpointRouting = false)
+            //services.AddDbContext<UserDBContext>(options => options.UseSqlServer("server=localhost,1434;user id=sa;password=tSlY4ETLAZ;database=UserManagement;"));
+            services.AddMvc(options => options.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
             services.AddSingleton<ICommandBus>(new CommandBus(Assembly.GetExecutingAssembly()));
             services.AddSingleton<IQueryBus>(new QueryBus(Assembly.GetExecutingAssembly()));

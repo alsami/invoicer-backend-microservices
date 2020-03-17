@@ -3,15 +3,24 @@ using Invoicer.Common.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Polly;
 using UserService.Models;
+using UserService.Repositories;
 
 namespace UserService.DataAccess
 {
-    public class UserDBContext : DbContext, IDbContext
+    public class UserDBContext : DbContext, IDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> DataSet { get; set; }
 
-        public UserDBContext(DbContextOptions<UserDBContext> options) : base(options)
+        //public UserDBContext(DbContextOptions<UserDBContext> options) : base(options)
+        //{
+        //}
+        public UserDBContext()
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("server=localhost,1434;user id=sa;password=tSlY4ETLAZ;database=UserManagement;");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

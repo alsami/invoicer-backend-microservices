@@ -9,6 +9,7 @@ namespace Invoicer.Common
     public class RepositoryModule : Autofac.Module
     {
         public Assembly ExecutingAssembly { get; set; }
+        public string ConnectionString { get; set; }
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -17,9 +18,9 @@ namespace Invoicer.Common
             .AsImplementedInterfaces();
 
             builder.RegisterAssemblyTypes(ExecutingAssembly)
-            .Where(t => t.IsAssignableTo<IDbContext>())
-            .AsImplementedInterfaces();
-
+                .Where(t => t.IsClosedTypeOf(typeof(IDbContext<>)))
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
         }
     }

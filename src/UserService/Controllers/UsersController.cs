@@ -23,8 +23,8 @@ namespace UserService.Controllers
         private UserDBContext _dbContext;
         private readonly ICommandBus _commandBus;
         private readonly IQueryBus _queryBus;
-        public UsersController(UserDBContext dBContext, ICommandBus commandBus, IQueryBus queryBus) {
-            _dbContext = dBContext;
+        public UsersController(ICommandBus commandBus, IQueryBus queryBus) {
+            //_dbContext = dBContext;
             _commandBus = commandBus;
             _queryBus = queryBus;
         }
@@ -33,15 +33,17 @@ namespace UserService.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             Console.WriteLine("Worked");
-            return Ok(await _dbContext.Users.ToListAsync());
+            return Ok(await _dbContext.DataSet.ToListAsync());
         }
 
         // GET api/users/5
         [HttpGet("{Id}", Name = "GetUserById")]
         public async Task<IActionResult> GetUserById([FromBody]GetUserByIDQuery query)
         {
-            var user = await _queryBus.Query<GetUserByIDQuery, User>(query);
-            return Ok(user);
+            var users = await _queryBus.Query<GetUserByIDQuery, User>(query);
+            //string id = new Guid().ToString();
+            //var users = await _dbContext.DataSet.FirstOrDefaultAsync(x => x.Id == id);
+            return Ok(users);
         }
 
         // POST api/values
