@@ -4,25 +4,23 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Invoicer.Common.Handlers;
 
 namespace Invoicer.Common
 {
-    public interface IQueryBus
-    {
-        Task<TResponse> Query<TRequest, TResponse>(TRequest query) where TRequest : IQuery<TResponse>;
-    }
     public class QueryBus : IQueryBus
     {
-        private Assembly ExecutingAssembly { get; set; }
-        public QueryBus(Assembly assembly)
+        private readonly IServiceProvider _serviceProvider;
+
+        public QueryBus(IServiceProvider serviceProvider)
         {
-            ExecutingAssembly = assembly;
+            this._serviceProvider = serviceProvider;
         }
 
         public Task<TResponse> Query<TRequest, TResponse>(TRequest query) where TRequest : IQuery<TResponse>
         {
-            using (var scope = ContainerConfigurator.GetInstance(ExecutingAssembly).Container.BeginLifetimeScope())
+            using (var scope = this._serviceProvider.GetAutofacRoot().BeginLifetimeScope())
             {
                 var handlers = scope.Resolve<IEnumerable<IQueryHandler<TRequest, TResponse>>>().ToList();
                 if (handlers.Count == 1)

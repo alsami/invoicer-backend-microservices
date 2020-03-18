@@ -18,10 +18,10 @@ namespace Invoicer.Common
             .AsImplementedInterfaces();
 
             builder.RegisterAssemblyTypes(ExecutingAssembly)
-                .Where(t => t.IsClosedTypeOf(typeof(IDbContext<>)))
+                .AsClosedTypesOf(typeof(IDbContext<>))
                 .AsSelf()
-                .InstancePerLifetimeScope();
-
+                // Db context is not thread-safe. If you get more than one instance running async, you end up having task canceled exception
+                .InstancePerDependency();
         }
     }
 }

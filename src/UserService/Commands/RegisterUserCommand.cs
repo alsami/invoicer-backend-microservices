@@ -1,5 +1,4 @@
-﻿using System;
-using Invoicer.Common;
+﻿using Invoicer.Common;
 using UserService.Models;
 
 namespace UserService.Commands
